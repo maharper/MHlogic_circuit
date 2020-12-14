@@ -1,24 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/python,latex,cmake
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,latex,cmake
-
-### CMake ###
-CMakeLists.txt.user
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-CMakeUserPresets.json
-
-### CMake Patch ###
-# External projects
-*-prefix/
+# Created by https://www.toptal.com/developers/gitignore/api/python,latex
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,latex
 
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
@@ -450,4 +432,4 @@ dmypy.json
 # profiling data
 .prof
 
-# End of https://www.toptal.com/developers/gitignore/api/python,latex,cmake
+# End of https://www.toptal.com/developers/gitignore/api/python,latex
