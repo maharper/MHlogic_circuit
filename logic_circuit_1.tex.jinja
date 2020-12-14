@@ -1,0 +1,38 @@
+\documentclass[border=2pt]{standalone} % convert = false
+\usepackage{mathtools}
+\usepackage[american,siunitx]{circuitikz}
+\usepackage[utf8]{inputenx}%  http://ctan.org/pkg/inputenx
+% Euler for math | Palatino for rm | Helvetica for ss | Courier for tt
+\renewcommand{\rmdefault}{ppl}% rm
+\linespread{1.05}% Palatino needs more leading
+\usepackage[scaled]{helvet}% ss //  http://ctan.org/pkg/helvet
+\usepackage{courier}% tt // http://ctan.org/pkg/courier
+\usepackage{eulervm}  %  http://ctan.org/pkg/eulervm
+% a better implementation of the euler package (not in gwTeX)
+\normalfont%
+\usepackage[T1]{fontenc}%  http://ctan.org/pkg/fontenc
+\usepackage{textcomp}%  http://ctan.org/pkg/textcomp
+
+\begin{document}
+\begin{circuitikz}[scale = 1]
+    \draw
+        node (gate) [or port,scale=2]{}
+        (gate.out)  to[short, -*] ++(1,0)
+        (gate.in 1) ++(-2,0) coordinate (A)node [left]{A}
+        (gate.in 2) ++(-2,0) coordinate (B)node [left]{B}
+        (A) to[inline not, *-] (gate.in 1)
+        (B) to[short, *-] (gate.in 2)
+        ;
+%  \draw                                           (1, 1.5)
+%        to[short]                                 (2, 1.5)
+%        to[open, v^ = $y(t)$, *-*]                (2, 0)
+%        to[short]                                 (1, 0);
+%  %
+%  \draw                                           (-1.5, 0)
+%        to[short]                                 (1, 0)
+%        to[C, l_ = $C$]                           (1, 1.5)
+%        to[L = 10<\nano\henry>]                               (-.5, 1.5)
+%        to[R = $\SI{10}{\mega\ohm}$]                               (-1.5, 1.5)
+%        to[american voltage source, v^ = $x(t)$]  (-1.5, 0);
+\end{circuitikz}
+\end{document} 
