@@ -15,17 +15,22 @@
 
 % for jinja compatibility
 % see https://tug.org/tug2019/slides/slides-ziegenhagen-python.pdf
-\newcommand{\VAR}[1]{short}
+\newcommand{\VAR}[1]{}
 \newcommand{\BLOCK}[1]{}
 
 
 \begin{document}
 \begin{circuitikz}[scale = 1]
+    \ctikzset{logic ports=ieee}
     \draw
-        node (gate) [\VAR{gate} port,scale=3]{}
-        (gate.out)  to[short, -*] ++(1,0) coordinate (C) node [right]{C}
-        (gate.in 1) ++(-2,0) coordinate (A)node [left]{A}
-        (gate.in 2) ++(-2,0) coordinate (B)node [left]{B}
+        node (gate) [\VAR{gate} port]{}
+        (gate.out)  to[short, -*] ++(0.5,0) coordinate (C) node [right]{C}
+        (gate.in 1) ++(-1,0) coordinate (A)node [left]{A}
+        (gate.in 2) ++(-1,0) coordinate (B)node [left]{B}
+        ;
+    \ctikzset{logic ports/scale=0.4}
+    \draw
+    
         (A) to[\VAR{Agatelink}, *-] (gate.in 1)
         (B) to[\VAR{Bgatelink}, *-] (gate.in 2)
         ;
