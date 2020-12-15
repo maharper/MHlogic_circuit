@@ -52,6 +52,7 @@ tex    : $(TEX_FILES)
 .PHONY : all
 all    : logic_circuit_1.py logic_circuit_1.tex.jinja Makefile
 	$(PYTHON) $<
+	make
 
 # clean
 .PHONY : clean
