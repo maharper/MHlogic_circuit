@@ -433,3 +433,10 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/python,latex
+
+## malcolm
+
+# output files
+*.pdf
+*.svg
+*.png
