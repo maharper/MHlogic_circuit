@@ -13,26 +13,21 @@
 \usepackage[T1]{fontenc}%  http://ctan.org/pkg/fontenc
 \usepackage{textcomp}%  http://ctan.org/pkg/textcomp
 
+% for jinja compatibility
+% see https://tug.org/tug2019/slides/slides-ziegenhagen-python.pdf
+\newcommand{\VAR}[1]{short}
+\newcommand{\BLOCK}[1]{}
+
+
 \begin{document}
 \begin{circuitikz}[scale = 1]
     \draw
-        node (gate) [or port,scale=2]{}
-        (gate.out)  to[short, -*] ++(1,0)
+        node (gate) [\VAR{gate} port,scale=3]{}
+        (gate.out)  to[short, -*] ++(1,0) coordinate (C) node [right]{C}
         (gate.in 1) ++(-2,0) coordinate (A)node [left]{A}
         (gate.in 2) ++(-2,0) coordinate (B)node [left]{B}
-        (A) to[inline not, *-] (gate.in 1)
-        (B) to[short, *-] (gate.in 2)
+        (A) to[\VAR{Agatelink}, *-] (gate.in 1)
+        (B) to[\VAR{Bgatelink}, *-] (gate.in 2)
         ;
-%  \draw                                           (1, 1.5)
-%        to[short]                                 (2, 1.5)
-%        to[open, v^ = $y(t)$, *-*]                (2, 0)
-%        to[short]                                 (1, 0);
-%  %
-%  \draw                                           (-1.5, 0)
-%        to[short]                                 (1, 0)
-%        to[C, l_ = $C$]                           (1, 1.5)
-%        to[L = 10<\nano\henry>]                               (-.5, 1.5)
-%        to[R = $\SI{10}{\mega\ohm}$]                               (-1.5, 1.5)
-%        to[american voltage source, v^ = $x(t)$]  (-1.5, 0);
 \end{circuitikz}
 \end{document} 

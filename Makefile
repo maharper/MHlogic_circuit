@@ -1,3 +1,6 @@
+# Python
+PYTHON=py
+
 # LaTeX
 LATEX=latexmk
 
@@ -22,14 +25,14 @@ SVG_FILES=$(patsubst %.tex, %.svg, $(TEX_FILES))
 .PHONY : pngs
 pngs : $(PNG_FILES)
 
-%.png : %.pdf Makefile
+%.png : %.pdf
 	$(CONVERT) $(CONVERT_INPUT_OPTIONS) $< $(CONVERT_OUTPUT_OPTIONS) $@
 
 # build svg
 .PHONY : svgs
 svgs : $(SVG_FILES)
 
-%.svg : %.pdf Makefile
+%.svg : %.pdf
 	$(PDF2SVG) -f $< -A $@
 
 # build pdfs
@@ -39,10 +42,22 @@ pdfs : $(PDF_FILES)
 %.pdf : %.tex
 	$(LATEX) $<
 
+# build tex
+.PHONY : tex
+tex    : $(TEX_FILES)
+
+%.tex  : logic_circuit_1.py logic_circuit_1.tex.jinja Makefile
+	$(PYTHON) $<	
+
+.PHONY : all
+all    : logic_circuit_1.py logic_circuit_1.tex.jinja Makefile
+	$(PYTHON) $<
+
 # clean
 .PHONY : clean
 clean : 
 	latexmk -c
+	rm *.tex
 
 # variables
 .PHONY : variables
