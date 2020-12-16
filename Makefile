@@ -1,3 +1,6 @@
+# project
+PROJECT=MH20logic_circuit_1
+
 # Python
 PYTHON=py
 
@@ -46,11 +49,14 @@ pdfs : $(PDF_FILES)
 .PHONY : tex
 tex    : $(TEX_FILES)
 
-%.tex  : logic_circuit_1.py logic_circuit_1.tex.jinja Makefile
+%.tex  : $(PROJECT)_tex.py $(PROJECT).tex.jinja $(PROJECT).json Makefile
 	$(PYTHON) $<	
 
+$(PROJECT).json : $(PROJECT)_configure.py
+	$(PYTHON) $<
+	
 .PHONY : all
-all    : logic_circuit_1.py logic_circuit_1.tex.jinja Makefile
+all    : $(PROJECT)_tex.py Makefile
 	$(PYTHON) $<
 	make
 
