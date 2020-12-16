@@ -36,10 +36,23 @@ configuration = [
         # },
     # }
 
+configurations = []
+
+for Atogate, Aname, Afunction in [('short','0','A'),('inline not','1','~A')]:
+    for gate, gatename, gatefunction in [('or','0','or'),('and','1','and')]:
+        for Btogate, Bname, Bfunction in [('short','0','B'),('inline not','1','~B')]:
+            configurations.append({
+                "filename": Aname+gatename+Bname,
+                "Atogate": Atogate,
+                "gate": gate,
+                "Btogate": Btogate,
+                "perl_function": Afunction+' '+gatefunction+' '+Bfunction
+                })
+
 json_out = project+'.json'
 
 with open(json_out, "w") as write_file:
-    json.dump(configuration, write_file)
+    json.dump(configurations, write_file)
     
 # from jinja2 import Environment, FileSystemLoader, StrictUndefined
 # file_loader = FileSystemLoader(['.','templates'])
