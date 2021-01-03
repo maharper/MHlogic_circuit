@@ -32,15 +32,7 @@ $showPartialCorrectAnswers = 0;
 ############################
 # Setup
 
-# image width and height
-$width = 300;
-$height = 300;
-$tex_size = 700;
-$image = image("circuit1.gif",
-    width=>$width,height=>$height,tex_size=>$tex_size,
-    extra_html_tags=>'alt="Diagram of a logic circuit."' );
-
-$nbits = 5;
+$nbits = 5;                                 # minimum of 4 in this problem
 $nbitsf = "%0".$nbits."b";
 
 # Do it like this to cover all possible permutations of inputs
@@ -50,11 +42,19 @@ $nbitsf = "%0".$nbits."b";
 
 # Mix up the order of the inputs
 @slice = NchooseK(5,5);
-$p = oct("0b".(join('',@pbits[@slice]))); # Turn the bits into an integer
+$p = oct("0b".(join('',@pbits[@slice])));   # Turn the bits into an integer
 $q = oct("0b".(join('',@qbits[@slice])));
 
 # Perl computes the outputs
 $pandnotq = $p&(~$q);
+
+# image width and height
+$width = 300;
+$height = 300;
+$tex_size = 700;
+$image = image("circuit1.gif",
+    width=>$width,height=>$height,tex_size=>$tex_size,
+    extra_html_tags=>'alt="Diagram of a logic circuit."' );
 
 # To display the output:
 # The output sequence is \(\{ sprintf $nbitsf, $pandnotq \}\).

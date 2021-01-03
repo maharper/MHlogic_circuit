@@ -38,9 +38,9 @@ configuration = [
 
 configurations = []
 
-for Atogate, Aname, Afunction in [('short','0','A'),('inline not','1','~A')]:
-    for gate, gatename, gatefunction in [('or','0','or'),('and','1','and')]:
-        for Btogate, Bname, Bfunction in [('short','0','B'),('inline not','1','~B')]:
+for Atogate, Aname, Afunction in [('short','0','$A'),('inline not','1','~$A')]:
+    for gate, gatename, gatefunction in [('or','0','|'),('and','1','&')]:
+        for Btogate, Bname, Bfunction in [('short','0','$B'),('inline not','1','~$B')]:
             configurations.append({
                 "filename": Aname+gatename+Bname,
                 "Atogate": Atogate,

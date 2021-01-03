@@ -26,37 +26,72 @@ loadMacros(
 #"PGauxiliaryFunctions.pl",
 );
 
+############################
+# My macros
+
+%Gates = (
+        0 => sub {
+                    my $output = shift;
+                    foreach (@_) {$output |= $_};
+        $output},
+        1 => sub {
+                    my $output = shift;
+                    foreach (@_) {$output &= $_};
+        $output},
+        );
+
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 0; 
 
 ############################
 # Setup
 
-$nbits = 5;                                 # minimum of 4 in this problem
+########
+# Choose the circuit
+
+$Atogate = random(0,1,1);                   # direct or not
+$Btogate = random(0,1,1);
+$gate = random(0,1,1);                      # OR or AND
+
+$circuit = join('',$Atogate,$Btogate,$gate);
+$image_file = $circuit.'.png';
+
+##########
+# Choose the inputs
+
+$nbits = 5;                                 # minimum of 4bits in this set up
 $nbitsf = "%0".$nbits."b";
+$bitmask = 2**$nbits - 1;
 
 # Do it like this to cover all possible permutations of inputs
 # and add an extra pair of inputs
-@pbits = (1,1,0,0,random(0,1,1));
-@qbits = (1,0,1,0,random(0,1,1));
+@Abits = (1,1,0,0,random(0,1,1));
+@Bbits = (1,0,1,0,random(0,1,1));
 
 # Mix up the order of the inputs
-@slice = NchooseK(5,5);
-$p = oct("0b".(join('',@pbits[@slice])));   # Turn the bits into an integer
-$q = oct("0b".(join('',@qbits[@slice])));
+@slice = NchooseK($nbits,$nbits);
+$A = oct("0b".(join('',@Abits[@slice])));   # Turn the bits into an integer
+$B = oct("0b".(join('',@Bbits[@slice])));
 
-# Perl computes the outputs
-$pandnotq = $p&(~$q);
+##########
+# set up the image display
 
-$image_file = '000.png';
-
-# image width and height
 $width = 300;
 $height = 300;
 $tex_size = 700;
 $image = image($image_file,
     width=>$width,height=>$height,tex_size=>$tex_size,
     extra_html_tags=>'alt="Diagram of a logic circuit."' );
+
+##########
+# The output
+
+
+
+
+
+# Perl computes the outputs
+$pandnotq = $p&(~$q);
 
 # To display the output:
 # The output sequence is \(\{ sprintf $nbitsf, $pandnotq \}\).
