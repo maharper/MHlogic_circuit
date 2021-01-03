@@ -7,7 +7,9 @@ project = 'MH20logic_circuit_1'
 
 import json
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
+
 file_loader = FileSystemLoader(['.','templates'])
+
 latex_jinja_env = Environment(
     block_start_string =    '\BLOCK{',
     block_end_string =      '}',
