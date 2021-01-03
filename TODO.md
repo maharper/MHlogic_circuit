@@ -5,6 +5,8 @@
 ## Release
 
 -[ ] revisit filenames nAorB vs 100 vs ?
+- [ ] Comment and document all code
+- [ ] tag pg
 
 ### Template
 - [ ] tweak circuit presentation. Colours, line widths etc
