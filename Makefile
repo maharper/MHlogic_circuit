@@ -13,8 +13,8 @@ CONVERT_INPUT_OPTIONS=-density 300
 CONVERT_OUTPUT_OPTIONS=-resize 640 -quality 90 -alpha remove
 
 # pdf2svg
-PDF2SVG=inkscape
-PDF2SVG_INPUT_OPTIONS=
+PDF2SVG=dvisvgm
+PDF2SVG_INPUT_OPTIONS=--pdfvenv
 PDF2SVG_OUTPUT_OPTIONS=
 
 # lower case .tex only
@@ -72,4 +72,13 @@ variables:
 	@echo TEX_FILES: $(TEX_FILES)
 	@echo PDF_FILES: $(PDF_FILES)
 	@echo PNG_FILES: $(PNG_FILES)
+
+# for upload
+$(PROJECT).tgz : $(PROJECT).pg $(PNG_FILES)
+	rm -rf $(PROJECT)/
+	mkdir $(PROJECT)/
+	cp $^ $(PROJECT)/
+	tar -czf $@ $(PROJECT)
+	rm -r $(PROJECT)/
+
 
