@@ -1,5 +1,7 @@
 # project
 PROJECT=MH20logic_circuit_1
+TEX_DIR=tex
+FIG_DIR=figs
 
 # Python
 PYTHON=py
@@ -17,11 +19,11 @@ PDF2SVG=dvisvgm
 PDF2SVG_OPTIONS=--pdf --optimize=all --verbosity=3
 
 # lower case .tex only
-TEX_FILES=$(wildcard *.tex)
-PDF_FILES=$(patsubst %.tex, %.pdf, $(TEX_FILES))
-PNG_FILES=$(patsubst %.tex, %.png, $(TEX_FILES))
-SVG_FILES=$(patsubst %.tex, %.svg, $(TEX_FILES))
-
+TEX_FILES=$(wildcard $(TEX_DIR)/*.tex)
+PDF_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.pdf)
+PNG_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.png)
+SVG_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.svg)
+# PDF_FILES=$(patsubst %.tex, %.pdf, $(TEX_FILES))
 
 # build images
 .PHONY : pngs
@@ -71,6 +73,7 @@ variables:
 	@echo TEX_FILES: $(TEX_FILES)
 	@echo PDF_FILES: $(PDF_FILES)
 	@echo PNG_FILES: $(PNG_FILES)
+	@echo SVG_FILES: $(SVG_FILES)
 
 # for upload
 $(PROJECT).tgz : $(PROJECT).pg $(PNG_FILES)
