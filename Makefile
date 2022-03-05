@@ -1,11 +1,14 @@
 # project
 PROJECT=MH20logic_circuit_1
+TEX_DIR=tex
+FIG_DIR=figs
 
 # Python
 PYTHON=py
 
 # LaTeX
 LATEX=latexmk
+LATEX_OPTIONS:=-cd -pdf
 
 # convert
 CONVERT=magick
@@ -14,14 +17,14 @@ CONVERT_OUTPUT_OPTIONS=-resize 640 -quality 90 -alpha remove
 
 # pdf2svg
 PDF2SVG=dvisvgm
-PDF2SVG_OPTIONS=--pdf --optimize=all --verbosity=3
+PDF2SVG_OPTIONS=--pdf --optimize=all --verbosity=3 --stdout
 
 # lower case .tex only
-TEX_FILES=$(wildcard *.tex)
-PDF_FILES=$(patsubst %.tex, %.pdf, $(TEX_FILES))
-PNG_FILES=$(patsubst %.tex, %.png, $(TEX_FILES))
-SVG_FILES=$(patsubst %.tex, %.svg, $(TEX_FILES))
-
+TEX_FILES=$(wildcard $(TEX_DIR)/*.tex)
+PDF_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.pdf)
+PNG_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.png)
+SVG_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.svg)
+# PDF_FILES=$(patsubst %.tex, %.pdf, $(TEX_FILES))
 
 # build images
 .PHONY : pngs
@@ -35,14 +38,15 @@ pngs : $(PNG_FILES)
 svgs : $(SVG_FILES)
 
 %.svg : %.pdf
-	$(PDF2SVG) $(PDF2SVG_OPTIONS) $<
+	$(PDF2SVG) $(PDF2SVG_OPTIONS) $< >$@
 
 # build pdfs
 .PHONY : pdfs
 pdfs : $(PDF_FILES)
 
-%.pdf : %.tex
-	$(LATEX) $<
+$(FIG_DIR)/%.pdf : $(TEX_DIR)/%.tex
+	$(LATEX) $(LATEX_OPTIONS) $<
+	mv $(TEX_DIR)/$*.pdf $(FIG_DIR)
 
 # build tex
 .PHONY : tex
@@ -71,6 +75,7 @@ variables:
 	@echo TEX_FILES: $(TEX_FILES)
 	@echo PDF_FILES: $(PDF_FILES)
 	@echo PNG_FILES: $(PNG_FILES)
+	@echo SVG_FILES: $(SVG_FILES)
 
 # for upload
 $(PROJECT).tgz : $(PROJECT).pg $(PNG_FILES)

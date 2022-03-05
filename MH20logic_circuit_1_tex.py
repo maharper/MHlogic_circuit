@@ -4,7 +4,9 @@
 # from https://tug.org/tug2019/slides/slides-ziegenhagen-python.pdf
 
 project = 'MH20logic_circuit_1'
+tex_dir = 'tex'
 
+from pathlib import Path
 import json
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
@@ -42,5 +44,5 @@ with open(project+".json", "r") as read_file:
 
 for configuration in configurations:
     tex_document = template.render(configuration, undefined=StrictUndefined)
-    with open(configuration["filename"]+'.tex','w') as output:
+    with open(Path(tex_dir)/(configuration["filename"]+'.tex'),'w') as output:
         output.write(tex_document)
