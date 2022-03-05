@@ -40,6 +40,10 @@ loadMacros(
         $output},
         );
 
+%Circuits = (
+        '000' => sub { $A | $B },
+        '111' => sub { ~$A & ~$B },
+        );
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 0; 
 
@@ -80,7 +84,7 @@ $width = 300;
 $height = 300;
 $tex_size = 700;
 $image = image($image_file,
-    width=>$width,height=>$height,tex_size=>$tex_size,
+    width=>$width,tex_size=>$tex_size,
     extra_html_tags=>'alt="Diagram of a logic circuit."' );
 
 ##########
@@ -109,6 +113,18 @@ Given the input sequences:
     B & =  \{ sprintf $nbitsf,$B \} 
 \end{array}
 \]
+$PAR
+A or B = \{ sprintf $nbitsf,($A | $B) \}
+$PAR
+A and B = \{ $A & $B \}
+$PAR
+A gate B = \{&{ $Gates{$gate} }($A,$B) \}
+$PAR
+A gate B = \{$Gates{$gate}->($A,$B) \}
+$PAR
+A or B = \{ sprintf $nbitsf,$Circuits{'000'}->() \}
+$PAR
+not A and not B = \{ sprintf $nbitsf,($Circuits{'111'}->()) & $bitmask \}
 $PAR
 Find the output sequence for the logic circuit diagram: $PAR
 $image 
