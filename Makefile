@@ -8,6 +8,7 @@ PYTHON=py
 
 # LaTeX
 LATEX=latexmk
+LATEX_OPTIONS:=-cd -pdf
 
 # convert
 CONVERT=magick
@@ -43,8 +44,9 @@ svgs : $(SVG_FILES)
 .PHONY : pdfs
 pdfs : $(PDF_FILES)
 
-%.pdf : %.tex
-	$(LATEX) $<
+$(FIG_DIR)/%.pdf : $(TEX_DIR)/%.tex
+	$(LATEX) $(LATEX_OPTIONS) $<
+	mv $(TEX_DIR)/$*.pdf $(FIG_DIR)
 
 # build tex
 .PHONY : tex
