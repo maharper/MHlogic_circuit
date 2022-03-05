@@ -17,7 +17,7 @@ CONVERT_OUTPUT_OPTIONS=-resize 640 -quality 90 -alpha remove
 
 # pdf2svg
 PDF2SVG=dvisvgm
-PDF2SVG_OPTIONS=--pdf --optimize=all --verbosity=3
+PDF2SVG_OPTIONS=--pdf --optimize=all --verbosity=3 --stdout
 
 # lower case .tex only
 TEX_FILES=$(wildcard $(TEX_DIR)/*.tex)
@@ -38,7 +38,7 @@ pngs : $(PNG_FILES)
 svgs : $(SVG_FILES)
 
 %.svg : %.pdf
-	$(PDF2SVG) $(PDF2SVG_OPTIONS) $<
+	$(PDF2SVG) $(PDF2SVG_OPTIONS) $< >$@
 
 # build pdfs
 .PHONY : pdfs
