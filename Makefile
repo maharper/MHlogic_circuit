@@ -2,6 +2,8 @@
 PROJECT=MH20logic_circuit_1
 TEX_DIR=tex
 FIG_DIR=figs
+PG_DIR=PG
+TEMPLATES_DIR=templates
 
 # Python
 PYTHON=py
@@ -25,6 +27,14 @@ PDF_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.pdf)
 PNG_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.png)
 SVG_FILES=$(TEX_FILES:$(TEX_DIR)%.tex=$(FIG_DIR)%.svg)
 # PDF_FILES=$(patsubst %.tex, %.pdf, $(TEX_FILES))
+
+# build upload
+$(PROJECT).tgz : $(PG_DIR)/$(PROJECT).pg $(PNG_FILES) $(SVG_FILES)
+	rm -rf $(PROJECT)/
+	mkdir $(PROJECT)/
+	cp $^ $(PROJECT)/
+	tar -czf $@ $(PROJECT)
+	rm -r $(PROJECT)/
 
 # build images
 .PHONY : pngs
@@ -52,10 +62,15 @@ $(FIG_DIR)/%.pdf : $(TEX_DIR)/%.tex
 .PHONY : tex
 tex    : $(TEX_FILES)
 
-%.tex  : $(PROJECT)_tex.py $(PROJECT).tex.jinja $(PROJECT).json Makefile
+%.tex  : $(PROJECT)_tex.py $(TEMPLATES_DIR)/$(PROJECT).tex.jinja $(PROJECT).json Makefile
 	$(PYTHON) $<	
 
-$(PROJECT).json : $(PROJECT)_configure.py
+# build pg
+$(PG_DIR)/$(PROJECT).pg : $(PROJECT)_pg.py $(TEMPLATES_DIR)/$(PROJECT).pg.jinja $(PROJECT).json
+	$(PYTHON) $<
+
+# Build configuration
+$(TEMPLATES_DIR)/$(PROJECT).json : $(PROJECT)_configure.py
 	$(PYTHON) $<
 	
 .PHONY : all
@@ -77,12 +92,5 @@ variables:
 	@echo PNG_FILES: $(PNG_FILES)
 	@echo SVG_FILES: $(SVG_FILES)
 
-# for upload
-$(PROJECT).tgz : $(PROJECT).pg $(PNG_FILES)
-	rm -rf $(PROJECT)/
-	mkdir $(PROJECT)/
-	cp $^ $(PROJECT)/
-	tar -czf $@ $(PROJECT)
-	rm -r $(PROJECT)/
 
 
