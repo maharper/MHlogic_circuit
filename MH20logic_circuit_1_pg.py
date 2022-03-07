@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python3
 
 # Experimenting with the Jinja and LaTeX
 # from https://tug.org/tug2019/slides/slides-ziegenhagen-python.pdf

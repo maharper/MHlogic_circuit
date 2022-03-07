@@ -21,6 +21,7 @@ python control file from C:\Users\Malcolm\Documents\Computing\Jinja\Jinja Experi
 * python
     * pathlib requires >= 3.6
 * jinja2
+* make (choco under windows)
 * a modern LaTeX
     * including latexmk
     * including dvisvgm
