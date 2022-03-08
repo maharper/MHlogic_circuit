@@ -22,6 +22,8 @@ python control file from C:\Users\Malcolm\Documents\Computing\Jinja\Jinja Experi
     * pathlib requires >= 3.6
 * jinja2
 * make (choco under windows)
+* [imagemagick](https://imagemagick.org)
+	* which relies on [Ghostscript](https://www.ghostscript.com/)
 * a modern LaTeX
     * including latexmk
     * including dvisvgm

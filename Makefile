@@ -6,7 +6,8 @@ PG_DIR=PG
 TEMPLATES_DIR=templates
 
 # Python
-PYTHON=py
+# PYTHON=py
+PYTHON=$(VENV)/python
 
 # LaTeX
 LATEX=latexmk
@@ -92,5 +93,6 @@ variables:
 	@echo PNG_FILES: $(PNG_FILES)
 	@echo SVG_FILES: $(SVG_FILES)
 
-
+# for python virtual environment
+include Makefile.venv
 
