@@ -1,5 +1,5 @@
 ## DESCRIPTION
-##   Given input sequences and a circuit diagram, determine the output of the logic gates.
+##  Given input sequences and a circuit diagram, determine the output of the logic gates.
 ## ENDDESCRIPTION
 
 ## DBsubject(Set theory and logic)
@@ -15,19 +15,24 @@
 ## Problem1('')
 ## KEYWORDS('Logic', 'Boolean', 'Operation','input sequence')
 
+## Revised(2022/03/09)
+
+## MO(1)
+## Static(0)
+
 DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
-"PG.pl",
-"MathObjects.pl",
-"PGbasicmacros.pl",
-"PGchoicemacros.pl",
-"PGanswermacros.pl",
-"PGcourse.pl",
-#"PGauxiliaryFunctions.pl",
+    "PGstandard.pl",
+    "MathObjects.pl",
+    "PGML.pl",
+    "PGchoicemacros.pl",    # For NchooseK()
+    "answerHints.pl",
+    "PGcourse.pl",
+    "contextArbitraryString.pl"
 );
 
-####################
+##########
 # My macros
 
 # Display an integer as a string in binary notation
@@ -37,16 +42,16 @@ sub binary_display {
     sprintf $nbitsf, $_[0] & $bitmask;
     };
 
-
-TEXT(beginproblem());
-$showPartialCorrectAnswers = 0; 
-
-####################
+##########
 # Configuration
 
+$showPartialCorrectAnswers = 0; 
 $image_ext = '.png';
 
-####################
+Context("ArbitraryString");
+
+
+##########
 # Setup
 
 @Circuits = (
@@ -58,7 +63,7 @@ $image_ext = '.png';
         {% endfor %}
 );
 
-####################
+##########
 # Choose the circuit
 
 $circuit = random(0,scalar(@Circuits)-1,1);
@@ -66,7 +71,7 @@ $circuit = random(0,scalar(@Circuits)-1,1);
 $image_file = $Circuits[$circuit]{'filestem'}.$image_ext;
 $circuit_function = $Circuits[$circuit]{'circuit_function'};
 
-####################
+##########
 # Choose the inputs
 
 $nbits = 5;                                 # minimum of 4 bits in this set up
@@ -83,55 +88,59 @@ $bitmask = 2**$nbits - 1;
 $A = oct("0b".(join('',@Abits[@slice])));   # Turn the bits into an integer
 $B = oct("0b".(join('',@Bbits[@slice])));
 
-####################
+##########
 # set up the image display
 
 $width = 300;
-$height = 300;
+# $height = 300;							# Setting both width and height forces the image into a stretched format
 $tex_size = 700;
 $image = image($image_file,
     width=>$width,tex_size=>$tex_size,
     extra_html_tags=>'alt="Diagram of a logic circuit."' );
 
-####################
+##########
 # Main Text and Solution
 
-Context()->texStrings;
-BEGIN_TEXT
+$answer = String(binary_display($Circuits[$circuit]{'circuit_function'}->()));
 
+TEXT(beginproblem());
+
+BEGIN_PGML
 Given the input sequences:
-\[
+[```
 \begin{array}{rl}
-    A & =  \{ sprintf $nbitsf,$A \} \\
-    B & =  \{ sprintf $nbitsf,$B \} 
+    A & =  [@ sprintf $nbitsf,$A @] \\
+    B & =  [@ sprintf $nbitsf,$B @] 
 \end{array}
-\]
-$PAR
-Find the output sequence for the logic circuit diagram: $PAR
-${BCENTER} $image ${ECENTER}
-$PAR
-The output sequence, \( C \) = \{ ans_rule(10) \}
-$PAR
-Note: the output sequence will be the same length (\{ $nbits \} bits) as the input sequences.
-END_TEXT
+```]
 
-ANS(str_cmp(binary_display($Circuits[$circuit]{'circuit_function'}->())));
+Find the output sequence for the logic circuit diagram:
+>> [@ $image @]* <<
+The output sequence, [` C `] is [______]{$answer}
 
-#BEGIN_HINT
-#Let \( Y \) be the output of the logic gates.
-#$PAR
-#OR gate: \( A + B = Y \)
-#$BR
-#0 occurs as an output of an OR gate only when both inputs are 0.
-#$PAR
-#AND gate: \( A \cdot B = Y \)
-#$BR
-#1 occurs as an output of an AND gate only when both inputs are 1.
-#$PAR
-#NOT gate: \( \overline{A} = Y \)
-#$BR
-#If the input is 1, the output is 0; if the input is 0, the output is 1.
-#END_HINT
+Note: the output sequence will be the same length ([$nbits] bits) as the input sequences.
+END_PGML
 
+BEGIN_PGML_HINT
+Let [` Y `] be the output of the logic gates.
+
+*OR* gate: [` A + B = Y `]  
+[` 0`] occurs as an output of an OR gate only when all inputs are [` 0 `].
+
+*AND* gate: [` A \cdot B = Y `]  
+[` 1 `] occurs as an output of an AND gate only when all inputs are [` 1 `].
+
+*NOT* gate: [` \overline{A} = Y `]  
+If the input is [` 1 `], the output is [` 0 `]; if the input is [` 0 `], the output is [` 1 `].  
+
+END_PGML_HINT
+
+# BEGIN_PGML_SOLUTION
+
+# END_PGML_SOLUTION
+
+COMMENT("The configuration is choosen randomly from eight possibilities as inputs A and B are negated or not and as the gate is an AND or an OR gate.");
+COMMENT("The input strings are $nbits bits long covering all possible input bit combinations plus one duplicate in random order.");
+COMMENT('MathObject version. Uses PGML.');
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.;
