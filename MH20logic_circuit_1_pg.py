@@ -59,5 +59,5 @@ with open(project+".json", "r") as read_file:
             # tex_file=Agatename+gatename+Bgatename+'.tex'
 
 pg_document = template.render({'configurations':configurations}, undefined=StrictUndefined)
-with open(Path(pg_dir)/(project+'.pg'),'w') as output:
+with open(Path(pg_dir)/(project+'.pg'),'w', newline='\n') as output:
     output.write(pg_document)
