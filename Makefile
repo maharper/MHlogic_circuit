@@ -1,8 +1,9 @@
 # project
 PROJECT=MH20logic_circuit_1
+CONFIG_DIR = configurations
 TEX_DIR=tex
 FIG_DIR=figs
-PG_DIR=PG
+PG_DIR=pg
 TEMPLATES_DIR=templates
 
 # Python
@@ -66,12 +67,18 @@ tex    : $(TEX_FILES)
 %.tex  : $(PROJECT)_tex.py $(TEMPLATES_DIR)/$(PROJECT).tex.jinja $(PROJECT).json Makefile
 	$(PYTHON) $<	
 
+%/$(TEX_DIR)/tex.stamp : $(PROJECT)_tex.py $(TEMPLATES_DIR)/%.tex.jinja $(CONFIG_DIR)/%.json
+	mkdir -p %/$(TEX_DIR)/
+	$(PYTHON) $< $*
+	touch $*/$(TEX_DIR)/tex.stamp
+
 # build pg
-$(PG_DIR)/$(PROJECT).pg : $(PROJECT)_pg.py $(TEMPLATES_DIR)/$(PROJECT).pg.jinja $(PROJECT).json
-	$(PYTHON) $<
+%/$(PG_DIR)/problem.pg : $(PROJECT)_pg.py $(TEMPLATES_DIR)/%.pg.jinja $(CONFIG_DIR)/%.json
+	$(PYTHON) $< $*
 
 # Build configuration
-$(TEMPLATES_DIR)/$(PROJECT).json : $(PROJECT)_configure.py
+# $(TEMPLATES_DIR)/$(PROJECT).json : $(PROJECT)_configure.py
+$(CONFIG_DIR)/%.json : $(CONFIG_DIR)/%_json.py
 	$(PYTHON) $<
 	
 .PHONY : all

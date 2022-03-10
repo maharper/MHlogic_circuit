@@ -1,63 +1,46 @@
 #!/usr/bin/env python3
-
-# Experimenting with the Jinja and LaTeX
-# from https://tug.org/tug2019/slides/slides-ziegenhagen-python.pdf
+"""logic_circuit_pg.py reads configuration data from <project>.json and
+a pg template from <project>.pg.jinja and combines it into pg problem code.
+"""
 
 project = 'MH20logic_circuit_1'
-tex_dir = 'tex'
+config_dir = 'configurations'
+# int_suffix = '_intermediates'
 pg_dir = 'pg'
 
+from argparse import ArgumentParser
 from pathlib import Path
 import json
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
+parser = ArgumentParser(description='Combine configuration json and jinja template into pg code.')
+parser.add_argument('project', help = 'Project name to process')
+parser.add_argument('--configuration', help = 'JSON configuration file, defaults to ./configurations/<project>.json')
+parser.add_argument('--pg', help = 'Sub-directory for output pg, defaults to ./<project>/pg/')
+
+args = parser.parse_args()
+
+project = args.project
+config_file = args.configuration if args.configuration is not None else Path(config_dir) / (project+'.json')
+template_file = project+'.pg.jinja'
+pg_dir = args.pg if args.pg is not None else Path(project) / pg_dir
+
+
 file_loader = FileSystemLoader(['.','templates'])
 
-latex_jinja_env = Environment(
-    block_start_string =    '\BLOCK{',
-    block_end_string =      '}',
-    variable_start_string = '\VAR{',
-    variable_end_string =   '}',
-    comment_start_string =  '\#{',
-    comment_end_string =    '}',
-    line_statement_prefix = '%-',
-    line_comment_prefix =   '%#',
-    trim_blocks = True,
-    autoescape = False,
-    loader=file_loader,
-    )
-
 pg_jinja_env = Environment(
-    # block_start_string =    '\BLOCK{',
-    # block_end_string =      '}',
-    # variable_start_string = '\VAR{',
-    # variable_end_string =   '}',
-    # comment_start_string =  '\#{',
-    # comment_end_string =    '}',
-    # line_statement_prefix = '%-',
-    # line_comment_prefix =   '%#',
     trim_blocks = True,
     autoescape = False,
     loader=file_loader,
     )
 
+template = pg_jinja_env.get_template(template_file)
 
-""" template = env.get_template('base.html.jinja')
-
-output = template.render(title='pretty standard')
- """
- 
-template = pg_jinja_env.get_template(project+'.pg.jinja')
-
-with open(project+".json", "r") as read_file:
+with open(config_file, "r") as read_file:
     configurations = json.load(read_file)
     
-# for Agatelink, Agatename in [('short','A'),('inline not','nA')]:
-    # for Bgatelink, Bgatename in [('short','B'),('inline not','nB')]:
-        # for gate, gatename in [('or','or'),('and','and')]:
-            # document = template.render(Agatelink=Agatelink,Bgatelink=Bgatelink,gate=gate,undefined=StrictUndefined)
-            # tex_file=Agatename+gatename+Bgatename+'.tex'
-
 pg_document = template.render({'configurations':configurations}, undefined=StrictUndefined)
-with open(Path(pg_dir)/(project+'.pg'),'w', newline='\n') as output:
+
+Path.mkdir(pg_dir, parents=True, exist_ok=True)
+with open(pg_dir / ('problem.pg'),'w', newline='\n') as output:
     output.write(pg_document)
