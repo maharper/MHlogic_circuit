@@ -70,8 +70,8 @@ $(PROJECT)/%.tgz : %/$(FIG_DIR)/png.stamp %/$(FIG_DIR)/svg.stamp %/$(PG_DIR)/pro
 	# touch $@
 
 .PRECIOUS : %/$(FIG_DIR)/png.stamp
-%/$(FIG_DIR)/png.stamp : %/$(FIG_DIR)/pdf.stamp
-	$(foreach file, $(wildcard $*/$(FIG_DIR)/*.pdf), $(CONVERT) $(CONVERT_INPUT_OPTIONS) $(file) $(CONVERT_OUTPUT_OPTIONS) $(subst .pdf,.png,$(file));)
+%/$(FIG_DIR)/png.stamp : %/$(FIG_DIR)/pdf.stamp  $(subst .pdf,.png,$(wildcard $\*/$(FIG_DIR)/*.pdf))
+#	$(foreach file, $(wildcard $*/$(FIG_DIR)/*.pdf), $(CONVERT) $(CONVERT_INPUT_OPTIONS) $(file) $(CONVERT_OUTPUT_OPTIONS) $(subst .pdf,.png,$(file));)
 	touch $@
 #  $(subst .pdf,.png,$(wildcard $\*/figs/*.pdf))
 
@@ -86,10 +86,12 @@ $(PROJECT)/%.tgz : %/$(FIG_DIR)/png.stamp %/$(FIG_DIR)/svg.stamp %/$(PG_DIR)/pro
 #  $(subst pdf,svg,$(wildcard $\*/figs/*.pdf))
 
 .PRECIOUS : %/$(FIG_DIR)/svg.stamp
-%/$(FIG_DIR)/svg.stamp : %/$(FIG_DIR)/pdf.stamp
-	$(foreach file, $(wildcard $*/$(FIG_DIR)/*.pdf), $(PDF2SVG) $(PDF2SVG_OPTIONS) --output=$(subst .pdf,.svg,$(file)) $(file);)
+%/$(FIG_DIR)/svg.stamp : %/$(FIG_DIR)/pdf.stamp $(subst .pdf,.svg,$(wildcard $\*/$(FIG_DIR)/*.pdf))
+#	$(foreach file, $(wildcard $*/$(FIG_DIR)/*.pdf), $(PDF2SVG) $(PDF2SVG_OPTIONS) --output=$(subst .pdf,.svg,$(file)) $(file);)	
 	touch $@
 
+#  
+# $(subst .pdf,.svg,$(wildcard $\*/$(FIG_DIR)/*.pdf))
 .PRECIOUS : %.svg %/$(FIG_DIR)/pdf.stamp
 %.svg : %.pdf
 	$(PDF2SVG) $(PDF2SVG_OPTIONS) --output=$@ $< 

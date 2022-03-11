@@ -13,9 +13,9 @@
 
 ## Enhancement
 
-- [ ] PGML
-- [ ] incorporate venv code into the makefile
-- [ ] extend to NAND/NOR
+- [x] PGML
+- [x] incorporate venv code into the makefile
+- [x] extend to NAND/NOR
 - [ ] extend to more complicated situation
     * three inputs
     * ...

@@ -23,12 +23,12 @@
 \begin{circuitikz}[scale = 1]
     \ctikzset{logic ports=ieee}
     \draw (0,0) coordinate (B)node [left]{B}
-        (B) -| ++(0.5,0.5) coordinate (B1)%node [left]{B1}
+        (B) -| ++(0.5,0.5) coordinate (B1)
         (B) to[short, *-] ++(0.5,0) to[short, -] ++(0,-0.5) coordinate (B2)%node [left]{B2}
 %        (B) ++(5,0) coordinate (D)node [right]{D}
         ;
     \draw
-        (B1) ++(1,0) node (gate1) [nor port, anchor=in 2]{}
+        (B1) ++(1,0) node (gate1) [\VAR{gate1} port, anchor=in 2]{}
         (gate1.in 1) ++(-1.5,0) coordinate (A)node [left]{A}
 %        (gate1.in 2) ++(-1.0,0) coordinate (B1)
 %        (B) ++(4.5,0) coordinate (out)
@@ -36,56 +36,26 @@
 %        (gate1.out)  to[short, -] ++(0.5,0) to[short, -]  (out) % to[short,-*] ++(0.5,0) node [right]{E}
         ;
     \draw
-        (B2) ++(1,0) node (gate2) [nand port, anchor=in 1]{}
+        (B2) ++(1,0) node (gate2) [\VAR{gate2} port, anchor=in 1]{}
 %        (gate2.out)  to[short, -*] ++(0.5,-1) coordinate (F) node [right]{F}
 %        (gate2.in 1) ++(-1,0) coordinate (B2)
         (gate2.in 2) ++(-1.5,0) coordinate (C)node [left]{C}
         (gate2.out) ++(1.0,0) coordinate (out2j)
         ;
     \draw
-        (B) ++(6,0) node (gate3) [xor port]{}
+        (B) ++(6,0) node (gate3) [\VAR{gate3} port]{}
         (gate3.out)  to[short, -*] ++(0.5,0) coordinate (D) node [right]{D}
 %        (gate3.in 1) ++(-1,0) coordinate (A)node [left]{A}
 %        (gate3.in 2) ++(-1,0) coordinate (B)node [left]{B}
         ;
     \ctikzset{logic ports/scale=0.4}
     \draw
-        (A) to[short, *-] (gate1.in 1)
-        (B1) to[inline not,-] (gate1.in 2)
-        (B2) to[inline not,-] (gate2.in 1)
-        (C) to[inline not,*-] (gate2.in 2)
-        (gate1.out) to[inline not,-] (out1j) |- (gate3.in 1)
-        (gate2.out) to[inline not,-] (out2j) |- (gate3.in 2)
+        (A) to[\VAR{Atogate}, *-] (gate1.in 1)
+        (B1) to[\VAR{Btogate1},-] (gate1.in 2)
+        (B2) to[\VAR{Btogate2},-] (gate2.in 1)
+        (C) to[\VAR{Ctogate},*-] (gate2.in 2)
+        (gate1.out) to[\VAR{gate1out},-] (out1j) |- (gate3.in 1)
+        (gate2.out) to[\VAR{gate2out},-] (out2j) |- (gate3.in 2)
         ;
 \end{circuitikz}
-%\begin{circuitikz}[scale = 1]
-%    \ctikzset{logic ports=ieee}
-%    \draw (-2.5,0) coordinate (B)node [left]{B};
-%    \draw
-%        (0,1) node (gate1) [nor port]{}
-%        (gate1.in 1) ++(-1.5,0) coordinate (A)node [left]{A}
-%        (gate1.in 2) ++(-1.0,0) coordinate (B1)
-%%        (B) ++(4.5,0) coordinate (out)
-%        (gate1.out)  to[short, -] ++(0.5,0) to[short, -]  (out) % to[short,-*] ++(0.5,0) node [right]{E}
-%        ;
-%    \draw
-%        (0,-1) node (gate2) [nand port]{}
-%%        (gate2.out)  to[short, -*] ++(0.5,-1) coordinate (F) node [right]{F}
-%        (gate2.in 1) ++(-1,0) coordinate (B2)
-%        (gate2.in 2) ++(-1.5,0) coordinate (C)node [left]{C}
-%        ;
-%%    \draw
-%%        node (gate3) [xor port]{}
-%%        (gate3.out)  to[short, -*] ++(0.5,0) coordinate (G) node [right]{G}
-%%        (gate3.in 1) ++(-1,0) coordinate (A)node [left]{A}
-%%        (gate3.in 2) ++(-1,0) coordinate (B)node [left]{B}
-%%        ;
-%    \ctikzset{logic ports/scale=0.4}
-%    \draw
-%        (A) to[short, *-] (gate1.in 1)
-%%        (B) to[short, *-] (gate.in 2)
-%%        (B) to[short, *-] (out)
-%        (C) to[inline not,*-] (gate2.in 2)
-%        ;
-%\end{circuitikz}
 \end{document} 
