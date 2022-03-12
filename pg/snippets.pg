@@ -1,0 +1,120 @@
+# Saved snippets 
+
+##########
+# Context setups:
+
+# ArbitraryString
+loadMacros(
+    "contextArbitraryString.pl",
+);
+
+...
+
+Context("ArbitraryString");
+
+# Works, but doesn't strip whitespace
+
+##########
+
+# String with Autostrings
+loadMacros(
+    "contextString.pl",
+    "parserAutoStrings.pl",
+);
+
+...
+
+Context("String");
+AutoStrings();
+
+# Strips whitespace nicely, but adds an error message stating the solution!
+# Requires:
+
+$cmp = $answer -> cmp()->withPostFilter(sub { 
+  my $ans = shift; 
+  $ans->{ans_message} = "";
+  return $ans; 
+});
+
+# To strip the error message
+
+##########
+
+# Numeric with autostrings
+
+Context("Numeric");
+
+# works fine, but accepts  things like 20*500 or 010000
+
+##########
+
+
+############################
+# My macros
+
+%Gates = (
+        0 => sub {
+                    my $output = shift;
+                    foreach (@_) {$output |= $_};
+        $output},
+        1 => sub {
+                    my $output = shift;
+                    foreach (@_) {$output &= $_};
+        $output},
+        );
+
+# 0 is a multi-input AND, 1 is a multi-input OR
+# I think this is overkill now.
+
+########
+# Choose the circuit
+
+$Atogate = random(0,1,1);                   # direct or not
+$Btogate = random(0,1,1);
+$gate = random(0,1,1);                      # OR or AND
+
+$circuit = join('',$Atogate,$Btogate,$gate);
+$image_file = $circuit.'.png';
+
+# Original way of choosing the circuit.
+# This would allow building the circuit equivalent function in pg.
+# But it is probably easier and more general to build it in the same code that controls building the image.
+
+##########
+# Some testing code
+
+$PAR
+A or B = \{ sprintf $nbitsf,($A | $B) \}
+$PAR
+A and B = \{ $A & $B \}
+$PAR
+A gate B = \{&{ $Gates{$gate} }($A,$B) \}
+$PAR
+A gate B = \{$Gates{$gate}->($A,$B) \}
+$PAR
+A or B = \{ sprintf $nbitsf,$Circuits{'000'}->() \}
+$PAR
+not A and not B = \{ sprintf $nbitsf,($Circuits{'111'}->()) & $bitmask \}
+
+# A variation
+
+$PAR
+A or B = \{ sprintf $nbitsf,($A | $B) \}
+$PAR
+A and B = \{ binary_display($A & $B) \}
+$PAR
+A gate B = \{&{ $Gates{$gate} }($A,$B) \}
+$PAR
+A gate B = \{$Gates{$gate}->($A,$B) \}
+$PAR
+A or B = \{ sprintf $nbitsf,$Circuits[0]{'circuit_eval'}->() \}
+$PAR
+not A and not B = \{ sprintf $nbitsf,($Circuits[7]{'circuit_eval'}->())  & $bitmask \}
+$PAR
+scalar(@Circuits) = \{ scalar(@Circuits) \}
+$PAR
+
+# Note on display
+# To display the output:
+# The output sequence is \(\{ sprintf $nbitsf, $pandnotq \}\).
+

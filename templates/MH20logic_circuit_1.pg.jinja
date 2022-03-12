@@ -15,7 +15,7 @@
 ## Problem1('')
 ## KEYWORDS('Logic', 'Boolean', 'Operation','input sequence')
 
-## Revised(2022/03/09)
+## Revised(2022/03/12)
 
 ## MO(1)
 ## Static(0)
@@ -29,7 +29,8 @@ loadMacros(
     "PGchoicemacros.pl",    # For NchooseK()
     "answerHints.pl",
     "PGcourse.pl",
-    "contextArbitraryString.pl"
+    "contextString.pl",
+    "parserAutoStrings.pl",
 );
 
 ##########
@@ -48,8 +49,8 @@ sub binary_display {
 $showPartialCorrectAnswers = 0; 
 $image_ext = '.png';
 
-Context("ArbitraryString");
-
+Context("String");
+AutoStrings();
 
 ##########
 # Setup
@@ -102,6 +103,11 @@ $image = image($image_file,
 # Main Text and Solution
 
 $answer = String(binary_display($Circuits[$circuit]{'circuit_function'}->()));
+$cmp = $answer -> cmp()->withPostFilter(sub { 
+  my $ans = shift; 
+  $ans->{ans_message} = "";
+  return $ans; 
+});
 
 TEXT(beginproblem());
 
@@ -116,7 +122,7 @@ Given the input sequences:
 
 Find the output sequence for the logic circuit diagram:
 >> [@ $image @]* <<
-The output sequence, [` C `] is [______]{$answer}
+The output sequence, [` C `] is [______]{$cmp}
 
 Note: the output sequence will be the same length ([$nbits] bits) as the input sequences.
 END_PGML
