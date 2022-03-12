@@ -1,46 +1,72 @@
 #!/usr/bin/env python3
-"""logic_circuit_pg.py reads configuration data from <project>.json and
-a pg template from <project>.pg.jinja and combines it into pg problem code.
+"""Produces WeBWorK pg code from JSON configuration and a jinja template.
+
+See --help for parameters
 """
 
-project = 'MH20logic_circuit_1'
-config_dir = 'configurations'
-# int_suffix = '_intermediates'
-pg_dir = 'pg'
-
 from argparse import ArgumentParser
-from pathlib import Path
 import json
+from pathlib import Path
+
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-parser = ArgumentParser(description='Combine configuration json and jinja template into pg code.')
-parser.add_argument('project', help = 'Project name to process')
-parser.add_argument('--configuration', help = 'JSON configuration file, defaults to ./configurations/<project>.json')
-parser.add_argument('--pg', help = 'Sub-directory for output pg, defaults to ./<project>/pg/')
+project = 'MHlogic_circuit'
 
-args = parser.parse_args()
+def main():
 
-project = args.project
-config_file = args.configuration if args.configuration is not None else Path(config_dir) / (project+'.json')
-template_file = project+'.pg.jinja'
-pg_dir = args.pg if args.pg is not None else Path(project) / pg_dir
+    args = parse_args()
+    configurations = get_configs(args.configuration)
+    pg_code = produce_pg(args.template, configurations)
+    write_pg(pg_code, args.pg)
+
+def parse_args():
+ 
+    config_dir =  'configurations'
+    templ_dir = 'templates'
+    pg_dir = 'pg'
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('problem', help = 'Problem name to process')
+    parser.add_argument('--configuration', help = f'JSON configuration file, defaults to ./{config_dir}/<problem>.json')
+    parser.add_argument('--template', help = f'PG input template file, defaults to ./{templ_dir}/<problem>.pg.jinja')
+    parser.add_argument('--pg', help = f'PG output file, defaults to ./<problem>/{pg_dir}/problem.pg')
+    args = parser.parse_args()
+    if args.configuration is None: args.configuration = Path(config_dir) / (args.problem+'.json')
+    if args.template is None: args.template = Path(templ_dir) / (args.problem+'.pg.jinja')
+    if args.pg is None: args.pg = Path(args.problem) / pg_dir / 'problem.pg'
+    return(args)
+
+def get_configs(config_file):
+
+    with open(config_file, "r") as read_file:
+        configurations = json.load(read_file)
+    return(configurations)
+
+def produce_pg(template_file, configurations):
+
+    file_loader = FileSystemLoader(template_file.parent)
+    pg_jinja_env = Environment(
+        trim_blocks = True,
+        autoescape = False,
+        loader=file_loader,
+        )
+    template = pg_jinja_env.get_template(template_file.name)
+    return(template.render({'configurations':configurations}, undefined=StrictUndefined))
+
+def write_pg(pg_code, pg_file):
+
+    Path(pg_file).parent.mkdir(parents=True, exist_ok=True)
+    with open(pg_file,'w', newline='\n') as output:
+        output.write(pg_code)
+
+if __name__ == '__main__':
+    main()
 
 
-file_loader = FileSystemLoader(['.','templates'])
 
-pg_jinja_env = Environment(
-    trim_blocks = True,
-    autoescape = False,
-    loader=file_loader,
-    )
 
-template = pg_jinja_env.get_template(template_file)
 
-with open(config_file, "r") as read_file:
-    configurations = json.load(read_file)
+
     
-pg_document = template.render({'configurations':configurations}, undefined=StrictUndefined)
 
-Path.mkdir(pg_dir, parents=True, exist_ok=True)
-with open(pg_dir / ('problem.pg'),'w', newline='\n') as output:
-    output.write(pg_document)
+
+

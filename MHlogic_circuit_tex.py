@@ -1,53 +1,72 @@
 #!/usr/bin/env python3
-"""logic_circuit_tex.py reads configuration data from <project>.json and
-a LaTeX template from <project>.tex.jinja and combines them into multiple tex files
-to produce the images needed by the problem.
+"""Produces TeX code from JSON configuration and a jinja template.
+
+The problem name is required, see --help for the other prarameters.
 """
 
-project = 'MH20logic_circuit_1'
-config_dir = 'configurations'
-tex_dir = 'tex'
-
 from argparse import ArgumentParser
-from pathlib import Path
 import json
+from pathlib import Path
+
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-parser = ArgumentParser(description='Combine configuration json and jinja template into tex code.')
-parser.add_argument('project', help = 'Project name to process')
-parser.add_argument('--configuration', help = 'JSON configuration file, defaults to ./configurations/<project>.json')
-parser.add_argument('--tex', help = 'Sub-directory for output tex, defaults to ./<project>/tex/')
+project = 'MHlogic_circuit'
 
-args = parser.parse_args()
+def main():
 
-project = args.project
-config_file = args.configuration if args.configuration is not None else Path(config_dir) / (project+'.json')
-template_file = project+'.tex.jinja'
-tex_dir = args.tex if args.tex is not None else Path(project) / tex_dir
+    args = parse_args()
+    configurations = get_configs(args.configuration)
+    Path(args.tex).mkdir(parents=True, exist_ok=True)
+    write_tex(configurations, args.template, args.tex)
 
-file_loader = FileSystemLoader(['.','templates'])
-
-latex_jinja_env = Environment(
-    block_start_string =    '\BLOCK{',
-    block_end_string =      '}',
-    variable_start_string = '\VAR{',
-    variable_end_string =   '}',
-    comment_start_string =  '\#{',
-    comment_end_string =    '}',
-    line_statement_prefix = '%-',
-    line_comment_prefix =   '%#',
-    trim_blocks = True,
-    autoescape = False,
-    loader=file_loader,
-    )
+def parse_args():
  
-template = latex_jinja_env.get_template(template_file)
+    config_dir =  'configurations'
+    templ_dir = 'templates'
+    tex_dir = 'tex'
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('problem', help = 'Problem name to process')
+    parser.add_argument('--configuration', help = f'JSON configuration file, defaults to ./{config_dir}/<problem>.json')
+    parser.add_argument('--template', help = f'PG input template file, defaults to ./{templ_dir}/<problem>.tex.jinja')
+    parser.add_argument('--tex', help = f'TEX output directory, defaults to ./<problem>/{tex_dir}/')
+    args = parser.parse_args()
+    if args.configuration is None: args.configuration = Path(config_dir) / (args.problem+'.json')
+    if args.template is None: args.template = Path(templ_dir) / (args.problem+'.tex.jinja')
+    if args.tex is None: args.tex = Path(args.problem) / tex_dir
+    return(args)
 
-with open(config_file, "r") as read_file:
-    configurations = json.load(read_file)
+def get_configs(config_file):
 
-Path.mkdir(tex_dir, parents=True, exist_ok=True)
-for configuration in configurations:
-    tex_document = template.render(configuration, undefined=StrictUndefined)
-    with open(Path(tex_dir)/(configuration["filename"]+'.tex'),'w') as output:
-        output.write(tex_document)
+    with open(config_file, "r") as read_file:
+        configurations = json.load(read_file)
+    return(configurations)
+
+def write_tex(configurations, template_file, out_dir):
+
+    template = get_tex_template(template_file)
+    Path.mkdir(out_dir, parents=True, exist_ok=True)
+    for configuration in configurations:
+        tex_document = template.render(configuration, undefined=StrictUndefined)
+        with open(Path(out_dir)/(configuration["filename"]+'.tex'),'w') as output:
+            output.write(tex_document)
+
+def get_tex_template(template_file):
+
+    file_loader = FileSystemLoader(template_file.parent)
+    latex_jinja_env = Environment(
+        block_start_string =    '\BLOCK{',
+        block_end_string =      '}',
+        variable_start_string = '\VAR{',
+        variable_end_string =   '}',
+        comment_start_string =  '\#{',
+        comment_end_string =    '}',
+        line_statement_prefix = '%-',
+        line_comment_prefix =   '%#',
+        trim_blocks = True,
+        autoescape = False,
+        loader=file_loader,
+        )
+    return(latex_jinja_env.get_template(template_file.name))
+
+if __name__ == '__main__':
+    main()
