@@ -3,7 +3,7 @@
 # Produce the json file that defines
 # the configuration of the problem
 
-project = 'MH22logic_circuit_3'
+problem = 'MH22logic_circuit_6'
 config_dir = 'configurations'
 
 from pathlib import Path
@@ -41,7 +41,7 @@ for Atogate, Aname, Afunction in [('short','0','$A'),('inline not','1','~$A')]:
                                             "perl_function": ' '.join(['(',gate1outfunction,'(',Afunction,gate1function,Bfunction1,'))',gate3function,'(',gate2outfunction,'(',Bfunction2,gate2function,Cfunction,'))']),
                                             })
 
-json_out = Path(config_dir) / (project+'.json')
+json_out = Path(config_dir) / (problem+'.json')
 
 with open(json_out, "w") as write_file:
     json.dump(configurations, write_file)
