@@ -26,12 +26,21 @@ loadMacros(
     "PGstandard.pl",
     "MathObjects.pl",
     "PGML.pl",
+    "contextString.pl",
+    "parserAutoStrings.pl",
     "PGchoicemacros.pl",    # For NchooseK()
     "answerHints.pl",
     "PGcourse.pl",
-    "contextString.pl",
-    "parserAutoStrings.pl",
 );
+
+##########
+# Configuration
+
+$showPartialCorrectAnswers = 0; 
+$image_ext = '.png';
+
+Context("String");
+AutoStrings();
 
 ##########
 # My macros
@@ -42,15 +51,6 @@ loadMacros(
 sub binary_display {
     sprintf $nbitsf, $_[0] & $bitmask;
     };
-
-##########
-# Configuration
-
-$showPartialCorrectAnswers = 0; 
-$image_ext = '.png';
-
-Context("String");
-AutoStrings();
 
 ##########
 # Setup
@@ -115,14 +115,14 @@ BEGIN_PGML
 Given the input sequences:
 [```
 \begin{array}{rl}
-    A & =  [@ sprintf $nbitsf,$A @] \\
-    B & =  [@ sprintf $nbitsf,$B @] 
+    A & =  [@ binary_display($A) @] \\
+    B & =  [@ binary_display($B) @]
 \end{array}
 ```]
 
 Find the output sequence for the logic circuit diagram:
 >> [@ $image @]* <<
-The output sequence, [` C `] is [______]{$cmp}
+The output sequence, [` C `], is [______]{$cmp}
 
 Note: the output sequence will be the same length ([$nbits] bits) as the input sequences.
 END_PGML
@@ -130,10 +130,10 @@ END_PGML
 BEGIN_PGML_HINT
 Let [` Z `] be the output of the logic gates.
 
-*NOR* gate: [` A + B = Z `]  
+*NOR* gate: [` \overline{A + B} = Z `]  
 [` 1 `] occurs as an output of an NOR gate only when all inputs are [` 0 `].
 
-*AND* gate: [` A \cdot B = Z `]  
+*AND* gate: [` \overline{A \cdot B} = Z `]  
 [` 0 `] occurs as an output of an AND gate only when all inputs are [` 1 `].
 
 *NOT* gate: [` \overline{A} = Z `]  

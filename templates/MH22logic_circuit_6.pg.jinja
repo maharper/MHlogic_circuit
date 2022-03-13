@@ -15,8 +15,6 @@
 ## Problem1('')
 ## KEYWORDS('Logic', 'Boolean', 'Operation','input sequence')
 
-## Revised()
-
 ## MO(1)
 ## Static(0)
 
@@ -26,12 +24,21 @@ loadMacros(
     "PGstandard.pl",
     "MathObjects.pl",
     "PGML.pl",
+    "contextString.pl",
+    "parserAutoStrings.pl",
     "PGchoicemacros.pl",    # For NchooseK()
     "answerHints.pl",
     "PGcourse.pl",
-    "contextString.pl",
-    "parserAutoStrings.pl",
 );
+
+##########
+# Configuration
+
+$showPartialCorrectAnswers = 0; 
+$image_ext = '.png';
+
+Context("String");
+AutoStrings();
 
 ##########
 # My macros
@@ -42,15 +49,6 @@ loadMacros(
 sub binary_display {
     sprintf $nbitsf, $_[0] & $bitmask;
     };
-
-##########
-# Configuration
-
-$showPartialCorrectAnswers = 0; 
-$image_ext = '.png';
-
-Context("String");
-AutoStrings();
 
 ##########
 # Setup
@@ -75,7 +73,7 @@ $circuit_function = $Circuits[$circuit]{'circuit_function'};
 ##########
 # Choose the inputs
 
-$nbits = 9;                                 # minimum of 4 bits in this set up
+$nbits = 9;                                 # minimum of 8 bits in this set up
 $nbitsf = "%0".$nbits."b";
 $bitmask = 2**$nbits - 1;
 
@@ -93,8 +91,7 @@ $C = oct("0b".(join('',@Cbits[@slice])));
 ##########
 # set up the image display
 
-$width = 600;
-# $height = 300;							# Setting both width and height forces the image into a stretched format
+$width = 600;               # A wider display for a more complicated circuit
 $tex_size = 700;
 $image = image($image_file,
     width=>$width,tex_size=>$tex_size,
@@ -116,15 +113,15 @@ BEGIN_PGML
 Given the input sequences:
 [```
 \begin{array}{rl}
-    A & =  [@ sprintf $nbitsf,$A @] \\
-    B & =  [@ sprintf $nbitsf,$B @] \\
-    C & =  [@ sprintf $nbitsf,$C @] 
+    A & =  [@ binary_display($A) @] \\
+    B & =  [@ binary_display($B) @] \\
+    C & =  [@ binary_display($C) @] 
 \end{array}
 ```]
 
 Find the output sequence for the logic circuit diagram:
 >> [@ $image @]* <<
-The output sequence, [` D `] is [______]{$cmp}
+The output sequence, [` D `], is [____]{$cmp}{10}
 
 Note: the output sequence will be the same length ([$nbits] bits) as the input sequences.
 END_PGML
@@ -132,10 +129,10 @@ END_PGML
 BEGIN_PGML_HINT
 Let [` Y `] be the output of the logic gates.
 
-*OR* gate: [` A + B = Y `]  
+*OR* gate: [` A + B + C = Y `]  
 [` 0`] occurs as an output of an OR gate only when all inputs are [` 0 `].
 
-*AND* gate: [` A \cdot B = Y `]  
+*AND* gate: [` A \cdot B \cdot C = Y `]  
 [` 1 `] occurs as an output of an AND gate only when all inputs are [` 1 `].
 
 *NOT* gate: [` \overline{A} = Y `]  
@@ -148,7 +145,7 @@ END_PGML_HINT
 # END_PGML_SOLUTION
 
 COMMENT("The configuration is choosen randomly from 160 possibilities as the gates are AND or OR gates and as the inputs and intermediate
-links are negated or not.  Only configurations with one or two two NOT gates are possible.");
+links are negated or not.  Only configurations with one or two NOT gates are possible.");
 COMMENT("The input strings are $nbits bits long covering all possible input bit combinations plus one duplicate in random order.");
 COMMENT('MathObject version. Uses PGML.');
 

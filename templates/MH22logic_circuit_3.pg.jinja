@@ -26,12 +26,21 @@ loadMacros(
     "PGstandard.pl",
     "MathObjects.pl",
     "PGML.pl",
+    "contextString.pl",
+    "parserAutoStrings.pl",
     "PGchoicemacros.pl",    # For NchooseK()
     "answerHints.pl",
     "PGcourse.pl",
-    "contextString.pl",
-    "parserAutoStrings.pl",
 );
+
+##########
+# Configuration
+
+$showPartialCorrectAnswers = 0; 
+$image_ext = '.png';
+
+Context("String");
+AutoStrings();
 
 ##########
 # My macros
@@ -42,15 +51,6 @@ loadMacros(
 sub binary_display {
     sprintf $nbitsf, $_[0] & $bitmask;
     };
-
-##########
-# Configuration
-
-$showPartialCorrectAnswers = 0; 
-$image_ext = '.png';
-
-Context("String");
-AutoStrings();
 
 ##########
 # Setup
@@ -123,7 +123,7 @@ Given the input sequences:
 
 Find the output sequence for the logic circuit diagram:
 >> [@ $image @]* <<
-The output sequence, [` D `] is [____]{$cmp}{10}
+The output sequence, [` D `], is [____]{$cmp}{10}
 
 Note: the output sequence will be the same length ([$nbits] bits) as the input sequences.
 END_PGML
