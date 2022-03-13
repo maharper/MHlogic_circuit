@@ -35,6 +35,7 @@ loadMacros(
 # Configuration
 
 $showPartialCorrectAnswers = 0; 
+
 $image_ext = '.png';
 
 Context("String");
@@ -144,8 +145,8 @@ END_PGML_HINT
 
 # END_PGML_SOLUTION
 
-COMMENT("The configuration is choosen randomly from 160 possibilities as the gates are AND or OR gates and as the inputs and intermediate
-links are negated or not.  Only configurations with one or two NOT gates are possible.");
+COMMENT("The configuration is choosen randomly from 48 possibilities as the gates are AND or OR gates and as the inputs and intermediate
+links are negated or not.  Permissible circuits have one negated input, one negated intermediate link, and both OR and AND gates.");
 COMMENT("The input strings are $nbits bits long covering all possible input bit combinations plus one duplicate in random order.");
 COMMENT('MathObject version. Uses PGML.');
 
