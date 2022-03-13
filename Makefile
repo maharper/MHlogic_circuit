@@ -1,6 +1,6 @@
 # project
 PROJECT=MHlogic_circuit
-PROBLEMS = MH20logic_circuit_1 MH22logic_circuit_2 MH22logic_circuit_3 MH22logic_circuit_6
+PROBLEMS = MH20logic_circuit_1 MH22logic_circuit_2 MH22logic_circuit_3 MH22logic_circuit_3b MH22logic_circuit_6
 CONFIG_DIR = configurations
 TEX_DIR=tex
 FIG_DIR=figs
