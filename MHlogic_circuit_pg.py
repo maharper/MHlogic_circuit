@@ -23,7 +23,8 @@ def parse_args():
  
     config_dir =  'configurations'
     templ_dir = 'templates'
-    pg_dir = 'pg'
+#    pg_dir = 'pg'
+    pg_dir = ''
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('problem', help = 'Problem name to process')
     parser.add_argument('--configuration', help = f'JSON configuration file, defaults to ./{config_dir}/<problem>.json')

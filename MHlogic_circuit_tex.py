@@ -18,12 +18,14 @@ def main():
     configurations = get_configs(args.configuration)
     Path(args.tex).mkdir(parents=True, exist_ok=True)
     write_tex(configurations, args.template, args.tex)
+    list_configurations(args.problem, configurations)
 
 def parse_args():
  
     config_dir =  'configurations'
     templ_dir = 'templates'
-    tex_dir = 'tex'
+#    tex_dir = 'tex'
+    tex_dir = ''
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('problem', help = 'Problem name to process')
     parser.add_argument('--configuration', help = f'JSON configuration file, defaults to ./{config_dir}/<problem>.json')
@@ -45,10 +47,12 @@ def write_tex(configurations, template_file, out_dir):
 
     template = get_tex_template(template_file)
     Path.mkdir(out_dir, parents=True, exist_ok=True)
-    for configuration in configurations:
-        tex_document = template.render(configuration, undefined=StrictUndefined)
-        with open(Path(out_dir)/(configuration["filename"]+'.tex'),'w') as output:
-            output.write(tex_document)
+    with open(Path(out_dir)/'tex.stamp','w') as stamp:
+        for configuration in configurations:
+            tex_document = template.render(configuration, undefined=StrictUndefined)
+            with open(Path(out_dir)/(configuration["filename"]+'.tex'),'w') as output:
+                output.write(tex_document)
+            stamp.write(configuration["filename"])
 
 def get_tex_template(template_file):
 
@@ -67,6 +71,14 @@ def get_tex_template(template_file):
         loader=file_loader,
         )
     return(latex_jinja_env.get_template(template_file.name))
+
+def list_configurations(problem, configurations):
+
+    Path.mkdir(Path(problem), parents=True, exist_ok=True)
+    with open(Path(problem)/'configurations','w') as configurations_list:
+        configurations_list.write(problem+"_FILE_STEM_LIST=")
+        for configuration in configurations:
+            configurations_list.write(configuration["filename"]+' ')
 
 if __name__ == '__main__':
     main()

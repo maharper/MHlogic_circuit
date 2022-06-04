@@ -23,3 +23,7 @@
 ### Makefile
 
 - [x] Get the production of svg working
+
+### Image format
+
+- [ ] Pick a lane, png or svg
