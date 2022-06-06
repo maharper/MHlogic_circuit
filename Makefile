@@ -91,7 +91,7 @@ pdfs : $(addsuffix /pdfs, $(PROBLEMS)) ;
 texs : $(addsuffix /tex.stamp, $(PROBLEMS)) ;
 
 .PRECIOUS : %/tex.stamp
-%/tex.stamp %/configurations : $(PROJECT)_tex.py $(TEMPLATES_DIR)/%.tex.jinja $(CONFIG_DIR)/%.json
+%/tex.stamp %/configurations : $(PROJECT)_tex.py $(TEMPLATES_DIR)/%.tex.jinja $(CONFIG_DIR)/%.json | venv
 	mkdir -p $*
 	$(PYTHON) $< $*
 #	cp $*/$(TEX_DIR)/*.tex $*
@@ -103,7 +103,7 @@ texs : $(addsuffix /tex.stamp, $(PROBLEMS)) ;
 
 pgs : $(addsuffix /problem.pg, $(PROBLEMS)) ;
 
-%/problem.pg : $(PROJECT)_pg.py $(TEMPLATES_DIR)/%.pg.jinja $(CONFIG_DIR)/%.json
+%/problem.pg : $(PROJECT)_pg.py $(TEMPLATES_DIR)/%.pg.jinja $(CONFIG_DIR)/%.json | venv
 	$(PYTHON) $< $*
 #	cp $*/$(PG_DIR)/problem.pg $*
 
@@ -111,30 +111,13 @@ pgs : $(addsuffix /problem.pg, $(PROBLEMS)) ;
 .PRECIOUS : $(CONFIG_DIR)/%.json
 $(CONFIG_DIR)/%.json : $(CONFIG_DIR)/%_json.py
 	$(PYTHON) $<
-	
-.PHONY : all
-all    : $(PROJECT)_tex.py Makefile
-	$(PYTHON) $<
-	make
 
 # clean
 .PHONY : clean
 clean : 
 	rm -r $(PROBLEMS)
-
-# variables
-.PHONY : variables
-variables:
-	@echo MH20logic_circuit_1_FILE_STEM_LIST: $(MH20logic_circuit_1_FILE_STEM_LIST)
-	@echo TEST: $(TEST)
-	@echo MH20logic_circuit_1_FILES: $(MH20logic_circuit_1_FILES)
-	@echo PNG_FILES: $(PNG_FILES)
-	@echo SVG_FILES: $(SVG_FILES)
-
-# text
-
-%/test:
-	@echo $($*_FILE_STEM_LIST)
+	rm -r $(PROJECT)
+	rm -r $(PROJECT).tgz
 
 # for python virtual environment
 include Makefile.venv
