@@ -102,10 +102,20 @@ $image = image($image_file,
 # Main Text and Solution
 
 $answer = String(binary_display($Circuits[$circuit]{'circuit_function'}->()));
+
+# Clean up the answer checker error messages
+
 $cmp = $answer -> cmp()->withPostFilter(sub { 
-  my $ans = shift; 
-  $ans->{ans_message} = "";
-  return $ans; 
+    my $ans = shift;
+    my $student_ans = $ans->{student_ans};
+    if ($student_ans =~ /[^01]/) {
+        $ans->{ans_message} = "Your answer should contain only the digits 0 and 1.";
+    } elsif (length($student_ans) != $nbits){
+        $ans->{ans_message} = "Your answer should have ".$nbits." bits.";
+    } else {
+        $ans->{ans_message} = "";
+    }
+    return $ans; 
 });
 
 TEXT(beginproblem());
