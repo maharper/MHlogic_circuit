@@ -27,7 +27,6 @@ loadMacros(
     "contextString.pl",
     "parserAutoStrings.pl",
     "PGchoicemacros.pl",    # For NchooseK()
-    "answerHints.pl",
     "PGcourse.pl",
 );
 
@@ -128,15 +127,13 @@ Note: the output sequence will be the same length ([$nbits] bits) as the input s
 END_PGML
 
 BEGIN_PGML_HINT
-Let [` Y `] be the output of the logic gates.
-
-*OR* gate: [` A + B + C = Y `]  
+*OR* gate: [` A + B + C `]  
 [` 0`] occurs as an output of an OR gate only when all inputs are [` 0 `].
 
-*AND* gate: [` A \cdot B \cdot C = Y `]  
+*AND* gate: [` A \cdot B \cdot C `]  
 [` 1 `] occurs as an output of an AND gate only when all inputs are [` 1 `].
 
-*NOT* gate: [` \overline{A} = Y `]  
+*NOT* gate: [` \overline{A} `]  
 If the input is [` 1 `], the output is [` 0 `]; if the input is [` 0 `], the output is [` 1 `].  
 
 END_PGML_HINT
