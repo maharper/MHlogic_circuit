@@ -15,7 +15,7 @@
 ## Problem1('')
 ## KEYWORDS('Logic', 'Boolean', 'Operation','input sequence')
 
-## Revised(2022/03/12)
+## Revised(2022/10/20)
 
 ## MO(1)
 ## Static(0)
@@ -49,6 +49,12 @@ AutoStrings();
 
 sub binary_display {
     sprintf $nbitsf, $_[0] & $bitmask;
+    };
+
+# Convert an array of 1s and 0s representing binary notation to an integer
+
+sub array_to_integer {
+    oct("0b".(join('',@_)));
     };
 
 ##########
@@ -85,11 +91,13 @@ $bitmask = 2**$nbits - 1;
 
 # Mix up the order of the inputs
 @slice = NchooseK($nbits,$nbits);
-$A = oct("0b".(join('',@Abits[@slice])));   # Turn the bits into an integer
-$B = oct("0b".(join('',@Bbits[@slice])));
+
+# bit array to integer
+$A = array_to_integer(@Abits[@slice])
+$B = array_to_integer(@Bbits[@slice])
 
 ##########
-# set up the image display
+# Set up the image display
 
 $width = 300;
 # $height = 300;							# Setting both width and height forces the image into a stretched format
