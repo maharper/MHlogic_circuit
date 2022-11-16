@@ -436,7 +436,21 @@ dmypy.json
 
 ## This project
 
+# Usually source, but generated this project
+*.tex
+
+# Generated configurations
+configurations/MH20logic_circuit_1.json
+configurations/MH22logic_circuit_2.json
+configurations/MH22logic_circuit_3.json
+configurations/MH22logic_circuit_3b.json
+configurations/MH22logic_circuit_6.json
+
 # output files
 *.pdf
 *.svg
 *.png
+
+# Packaged files
+*.tgz
+*.tar.gz
