@@ -41,12 +41,13 @@ $(PROJECT).tgz : $(PROBLEMS:%=$(PROJECT)/%.tgz)
 
 .PRECIOUS : $(PROJECT)/%.tgz
 .SECONDEXPANSION:
-$(PROJECT)/%.tgz : $$(addprefix $$*/, $$(addsuffix .png, $$($$*_FILE_STEM_LIST))) $$(addprefix $$*/, $$(addsuffix .svg, $$($$*_FILE_STEM_LIST))) %/problem.pg
+$(PROJECT)/%.tgz : $$(addprefix $$*/, $$(addsuffix .svg, $$($$*_FILE_STEM_LIST))) %/problem.pg
+# $$(addprefix $$*/, $$(addsuffix .png, $$($$*_FILE_STEM_LIST))) 
 #	@echo $^
 	rm -rf $(PROJECT)/$*
 	mkdir -p $(PROJECT)/$*
-	cp $*/*.png $(PROJECT)/$*
-#	cp $*/*.svg $(PROJECT)/$*
+#	cp $*/*.png $(PROJECT)/$*
+	cp $*/*.svg $(PROJECT)/$*
 	cp $*/problem.pg $(PROJECT)/$*/$*.pg
 	tar -czf $@ -C $(PROJECT)/ $*
 
