@@ -46,7 +46,7 @@ $(PROJECT)/%.tgz : $$(addprefix $$*/, $$(addsuffix .png, $$($$*_FILE_STEM_LIST))
 	rm -rf $(PROJECT)/$*
 	mkdir -p $(PROJECT)/$*
 	cp $*/*.png $(PROJECT)/$*
-	cp $*/*.svg $(PROJECT)/$*
+#	cp $*/*.svg $(PROJECT)/$*
 	cp $*/problem.pg $(PROJECT)/$*/$*.pg
 	tar -czf $@ -C $(PROJECT)/ $*
 
