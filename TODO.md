@@ -33,7 +33,15 @@
 ### Makefile
 
 - [x] Get the production of svg working
+- [ ] research GraphicsMagick vs ImageMagick
+    * supposedly GraphicsMagick is faster and more stable while ImageMagick is more versatile and flexible.
+    * not important as I am only using svgs for now.
 
 ### Image format
 
-- [ ] Pick a lane, png or svg
+- [x] Pick a lane, png or svg
+    * svg, works fine now with the addition of `#!latex \papercolor{white}` to the texs
+
+### git
+
+- [ ] update .gitignore to ignore the generated .pg files, `/configuration` files, and the `tex.stamps`.

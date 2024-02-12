@@ -42,6 +42,7 @@ $(PROJECT).tgz : $(PROBLEMS:%=$(PROJECT)/%.tgz)
 .PRECIOUS : $(PROJECT)/%.tgz
 .SECONDEXPANSION:
 $(PROJECT)/%.tgz : $$(addprefix $$*/, $$(addsuffix .svg, $$($$*_FILE_STEM_LIST))) %/problem.pg
+# Only make svg
 # $$(addprefix $$*/, $$(addsuffix .png, $$($$*_FILE_STEM_LIST))) 
 #	@echo $^
 	rm -rf $(PROJECT)/$*
